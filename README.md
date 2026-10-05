@@ -18,6 +18,11 @@ Built by Barret Robinson for his macro studio, and shared with Adaptalux.
 - **Arms:** a slider and an On switch each, *All on 100%* and *All off*, and *no arm* when a pod
   reports nothing plugged into that port. Every change is confirmed by the pod's own status
   report; a pod that does not answer in 2 s is reported.
+- **What's plugged in, and where:** the icon before an arm's name says what kind of arm it is
+  (White, Super Bright, Warm White, Cold White, UV, Red, Green, Blue, Yellow or a Xenon flash
+  arm; tap it to pick), and the tag after it draws the pod's face with that port lit. Pods can
+  be renamed too (tap the name under Set-up); the pod picture there fills in the ports that
+  report an arm.
 - **Looks:** set the sliders, name the look, *Save look*. *Apply* sets every arm (arms the look
   leaves out go off).
 - **Rave:** a random light show, one change per beat, 40 to 180 BPM. 180 is three changes a

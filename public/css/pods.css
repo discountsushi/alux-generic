@@ -232,7 +232,19 @@ input[type='range'][disabled] { opacity: 0.35; }
 .pod-manual { gap: 8px; margin-top: 6px; }
 .pod-manual .input { flex: 1; min-width: 200px; padding-top: 7px; padding-bottom: 7px; font-size: 12.5px; }
 .pod-manual .select { padding-top: 7px; padding-bottom: 7px; font-size: 12.5px; }
+.pod-arm { position: relative; }
 .pod-arm.off { opacity: 0.55; }
+.kind-btn { display: inline-grid; place-items: center; width: 28px; height: 28px; padding: 0; flex: none; border-radius: 8px; border: 1px solid var(--line); background: rgba(0, 0, 0, 0.25); color: var(--text-2); cursor: pointer; }
+.kind-btn svg { width: 18px; height: 18px; }
+.kind-btn:hover { border-color: var(--line-2); }
+.kind-btn.unset { border-style: dashed; }
+.kind-menu { position: absolute; left: 12px; top: 44px; z-index: 20; display: grid; gap: 2px; padding: 6px; border-radius: 12px; background: var(--panel-solid); border: 1px solid var(--line-2); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6); }
+.kind-menu button { display: flex; align-items: center; gap: 9px; padding: 6px 10px; border: 0; background: none; color: var(--text-2); border-radius: 8px; font-size: 12.5px; text-align: left; white-space: nowrap; }
+.kind-menu button:hover, .kind-menu button[aria-pressed='true'] { background: var(--panel-2); color: var(--text); }
+.kind-menu svg { width: 16px; height: 16px; }
+.port-tag { display: inline-flex; align-items: center; gap: 7px; }
+.port-glyph { width: 24px; height: 17px; flex: none; }
+.pod-row .pod-label .port-glyph { width: 30px; height: 21px; margin-right: 2px; }
 .pod-label { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; background: none; color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
 .pod-label svg { width: 12px; height: 12px; color: var(--text-3); }
 .pod-label:hover svg { color: var(--accent); }

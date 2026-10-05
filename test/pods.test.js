@@ -260,6 +260,28 @@ test('labels and looks persist in the store', async () => {
   assert.throws(() => again.deleteLook('soft'), /not saved/);
 });
 
+test('arm kinds and pod labels: set, kept, checked, and never a disconnect', async () => {
+  const store = memoryStore();
+  const { pods } = makePods({ store });
+  await pods.connect({ sim: true });
+  assert.deepEqual(pods.setArm('key', { kind: 'UV' }), { name: 'key', label: 'key', kind: 'uv' });
+  assert.deepEqual(pods.setArm('rim', { label: 'Rim', kind: 'super' }), { name: 'rim', label: 'Rim', kind: 'super' });
+  assert.throws(() => pods.setArm('rim', { kind: 'laser' }), /arm kind "laser"/);
+  assert.equal(pods.setArm('rim', { kind: '' }).kind, null, 'blank clears the kind');
+  assert.equal(pods.setArm('rim', {}).label, 'Rim', 'nothing given, nothing changed');
+  assert.equal(pods.setPodLabel('big', ' Control  Pod '), 'Control Pod');
+  assert.throws(() => pods.setPodLabel('nope', 'x'), /no pod "nope"/);
+  assert.equal(pods.connected, true, 'labels and kinds never drop the link');
+  const snap = pods.snapshot();
+  assert.equal(snap.arms.find((a) => a.name === 'key').kind, 'uv');
+  assert.equal(snap.pods.find((p) => p.name === 'big').label, 'Control Pod');
+  await pods.disconnect();
+  const again = new Pods({ store, linkFactory: () => new SimPod(miniCfg), log: quietLog });
+  assert.equal(again.config.arms.key.kind, 'uv');
+  assert.equal(again.config.pods.big.label, 'Control Pod');
+  assert.throws(() => normalizeConfig({ pods: { a: { address: 'E7FD172F118A' } }, arms: { x: { pod: 'a', kind: 'plasma' } } }), /arm kind/);
+});
+
 test('setConfig replaces the set-up and disconnects first', async () => {
   const { pods } = makePods();
   await pods.connect({ sim: true });
@@ -393,6 +415,13 @@ test('api: bootstrap carries the pods, connect sim, set, looks, label, rave, err
   assert.deepEqual(r.body.set, { key: 100, rim: 30.2, fill: 0 });
   r = await call('PUT', '/api/pods/arms/key/label', { label: 'Key left' });
   assert.deepEqual(r.body, { label: 'Key left' });
+  r = await call('PUT', '/api/pods/arms/key', { kind: 'warm' });
+  assert.deepEqual(r.body, { name: 'key', label: 'Key left', kind: 'warm' });
+  r = await call('PUT', '/api/pods/arms/key', { kind: 'nope' });
+  assert.equal(r.status, 400);
+  r = await call('PUT', '/api/pods/pods/mini_a/label', { label: 'Left mini' });
+  assert.deepEqual(r.body, { label: 'Left mini' });
+  assert.equal((await call('GET', '/api/pods')).body.pods[0].label, 'Left mini');
   r = await call('DELETE', '/api/pods/looks/Hero');
   assert.deepEqual(r.body, { deleted: 'Hero' });
   r = await call('DELETE', '/api/pods/looks/Hero');
