@@ -1,0 +1,8 @@
+* text=auto
+# Windows entry points must be CRLF on disk (cmd.exe); PowerShell and VBScript go with them
+*.cmd text eol=crlf
+*.vbs text eol=crlf
+*.ps1 text eol=crlf
+# macOS/Linux scripts stay LF
+*.sh text eol=lf
+*.png binary

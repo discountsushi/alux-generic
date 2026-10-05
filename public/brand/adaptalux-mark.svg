@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Adaptalux</title>
+  <desc>The Adaptalux ring: three arcs in blue, yellow and red.</desc>
+  <rect width="64" height="64" rx="14" fill="#0b0f12"/>
+  <g fill="none" stroke-width="9" stroke-linecap="butt">
+    <path stroke="#f0c850" d="M 35.8 10.3 A 22 22 0 0 1 48.9 46.1"/>
+    <path stroke="#f05840" d="M 46.1 48.9 A 22 22 0 0 1 17.9 48.9"/>
+    <path stroke="#00b8f0" d="M 15.1 46.1 A 22 22 0 0 1 28.2 10.3"/>
+  </g>
+</svg>

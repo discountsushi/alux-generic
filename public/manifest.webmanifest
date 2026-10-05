@@ -1,0 +1,14 @@
+{
+  "name": "Adaptalux pod control",
+  "short_name": "Adaptalux",
+  "description": "Control Adaptalux lighting pods over Bluetooth from any phone or browser on the network",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f12",
+  "theme_color": "#0b0f12",
+  "icons": [
+    { "src": "/brand/adaptalux-mark.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/adaptalux-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/adaptalux-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

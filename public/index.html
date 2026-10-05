@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0f12" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Adaptalux" />
+    <title>Adaptalux pod control</title>
+    <link rel="icon" href="/brand/adaptalux-mark.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/adaptalux-180.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/css/pods.css" />
+  </head>
+  <body>
+    <header class="appbar">
+      <a class="brand" href="/" aria-label="Adaptalux pod control">
+        <img class="brand-logo" src="/brand/adaptalux-logo.png" alt="Adaptalux" decoding="async" />
+        <small>pod control</small>
+      </a>
+    </header>
+    <main>
+      <section class="view active" id="view-pods"></section>
+    </main>
+    <p class="foot-note">
+      Drives Pod Mini 2.0 and Control Pod 3.0 lighting pods over Bluetooth from the computer this page is served by. Open it from any phone or
+      browser on the same network. Connect takes the pods from the Adaptalux app until you disconnect; the pods' own buttons keep working.
+    </p>
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+    <script type="module" src="/js/pods-app.js"></script>
+  </body>
+</html>
