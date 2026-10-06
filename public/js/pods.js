@@ -209,7 +209,7 @@ function setupHtml() {
   const rows = pods.map(
     (p) => `<div class="pod-row" data-pod="${esc(p.name)}">
       <button type="button" class="pod-label" data-act="pod-rename" title="Rename this pod">${podGlyph(p.model, null, p.armsPresent)}<b>${esc(p.label || p.name)}</b>${icon('edit')}</button><span class="faint">${esc(MODELS[p.model] || p.model)} · <span class="mono">${esc(p.address)}</span></span>
-      <span class="pod-state">${podState(p)}</span>
+      <span class="pod-state">${podState(p)}<label class="toggle pod-boost" title="Boost: full power. Off, the arms run at a third of the level set."><input type="checkbox" data-f="boost" data-pod="${esc(p.name)}" ${p.boost ? 'checked' : ''} ${p.connected ? '' : 'disabled'} />Boost</label></span>
       <button class="btn small ghost icon danger" data-act="pod-remove" aria-label="Remove this pod">${icon('trash')}</button>
     </div>`,
   );
@@ -305,10 +305,13 @@ function patch() {
   renderFoot();
   renderRave();
   const note = $('#podsNote', card);
+  const noBoost = connected && s.pods.some((p) => p.connected && p.boost === false);
   note.innerHTML = !s?.configured
     ? ''
     : !connected
       ? 'Connecting takes the pods away from the Adaptalux phone app until you disconnect; their buttons still work.'
+      : noBoost
+        ? `${s.pods.filter((p) => p.connected && p.boost === false).map((p) => esc(p.label || p.name)).join(', ')}: Boost is off, so the arms run at a third of the level set. Turn Boost on under Set-up for full power.`
       : links && Object.keys(links).some((k) => arms.some((a) => a.name === k))
         ? 'Arms set to follow a stage light take that light’s Power slider; moving their own slider overrides it until the stage changes again.'
         : '';
@@ -489,7 +492,9 @@ function onChange(e) {
     }
     return;
   }
-  if (t.dataset.f === 'rave') {
+  if (t.dataset.f === 'boost') {
+    action(() => api.put(`/api/pods/pods/${encodeURIComponent(t.dataset.pod)}/boost`, { on: t.checked }));
+  } else if (t.dataset.f === 'rave') {
     action(() => api.post('/api/pods/rave', t.checked ? { bpm: Number($('#podBpm', card).value) || 128 } : { on: false }));
   } else if (t.id === 'podBpm' && snap?.rave) {
     action(() => api.post('/api/pods/rave', { bpm: Number(t.value) || 128 }));

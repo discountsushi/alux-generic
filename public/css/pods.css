@@ -229,6 +229,8 @@ input[type='range'][disabled] { opacity: 0.35; }
 .pod-row:first-of-type { border-top: 0; }
 .pod-row b { color: var(--text); }
 .pod-row.found { color: var(--text-2); }
+.pod-state { display: inline-flex; align-items: center; gap: 10px; }
+.pod-boost { font-size: 12px; }
 .pod-manual { gap: 8px; margin-top: 6px; }
 .pod-manual .input { flex: 1; min-width: 200px; padding-top: 7px; padding-bottom: 7px; font-size: 12.5px; }
 .pod-manual .select { padding-top: 7px; padding-bottom: 7px; font-size: 12.5px; }

@@ -23,6 +23,8 @@ Built by Barret Robinson for his macro studio, and shared with Adaptalux.
   arm; tap it to pick), and the tag after it draws the pod's face with that port lit. Pods can
   be renamed too (tap the name under Set-up); the pod picture there fills in the ports that
   report an arm.
+- **Boost** (a switch per pod under Set-up): on, the arms get the level set; off, the pod drives
+  them at a third of it, which is what it reports back. Connecting leaves Boost as the pod has it.
 - **Looks:** set the sliders, name the look, *Save look*. *Apply* sets every arm (arms the look
   leaves out go off).
 - **Rave:** a random light show, one change per beat, 40 to 180 BPM. 180 is three changes a

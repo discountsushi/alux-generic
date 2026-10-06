@@ -92,8 +92,28 @@ test('addresses and look names are checked', () => {
 
 const miniCfg = { name: 'mini_a', address: 'E7:FD:17:2F:11:8A', model: 'pod_mini', boost: null, label: '' };
 
+test('boost off: the pod drives a third, and that is what a set is confirmed against', async () => {
+  const sim = new SimPod(miniCfg, { boost: false });
+  sim.lamps[0] = 255 - 255; // the phone app left port 2 at 100%, boost off: the pod reports 84
+  const pod = new Pod(miniCfg, sim, { confirmTimeoutMs: 100, log: quietLog });
+  const st = await pod.open();
+  assert.equal(st.levels[2], 84);
+  assert.equal(pod.levels[2], 253, 'read back as the level that was asked for');
+  assert.equal(pod.boost, false);
+  const got = await pod.confirm(await pod.send({ 2: 127 }));
+  assert.equal(got.levels[2], 42, 'driven at a third');
+  assert.equal(sim.level(2), 127, 'the pod holds what was asked');
+  const full = await pod.setBoost(true);
+  assert.equal(full.boost, true);
+  assert.equal(full.levels[2], 127, 'boost on: driven as asked');
+  const back = await pod.confirm(await pod.send({ 2: 200 }, { boost: false }));
+  assert.equal(back.boost, false);
+  assert.equal(back.levels[2], 66, 'boost off again: a third of 200');
+  await pod.close();
+});
+
 test('a pod connects without changing the light and confirms a set', async () => {
-  const sim = new SimPod(miniCfg);
+  const sim = new SimPod(miniCfg, { boost: true });
   sim.lamps[0] = 255 - 128; // port 2 at 50% before we connect
   const pod = new Pod(miniCfg, sim, { confirmTimeoutMs: 100, log: quietLog });
   const st = await pod.open();
@@ -122,7 +142,7 @@ test('a pod that never answers times out with what it last reported', async () =
 });
 
 test('a stale status before the real one does not confirm a set', async () => {
-  const sim = new SimPod(miniCfg, { staleReplies: 1 });
+  const sim = new SimPod(miniCfg, { staleReplies: 1, boost: true });
   const pod = new Pod(miniCfg, sim, { confirmTimeoutMs: 100, log: quietLog });
   await pod.open();
   const seq0 = await pod.send({ 2: 200 });
@@ -328,7 +348,7 @@ test('rave runs on the beat, any set ends it, off puts the lights back', async (
   assert.equal(await pods.startRave(180, { seed: 1 }), 180);
   assert.deepEqual(pods.snapshot().rave, { bpm: 180 });
   await sleep(1200);
-  const beats = sims.big.writes.length - writesBefore;
+  const beats = sims.big.writes.slice(writesBefore).filter((w) => w.length === 7).length; // set frames, not the '#' after each
   assert.ok(beats >= 2 && beats <= 5, `about 3 beats a second at 180 BPM, got ${beats} in 1.2 s`);
   assert.equal(await pods.startRave(60), 60, 'running: only the tempo changes');
   await pods.setLevels({ fill: 100 });
@@ -422,6 +442,10 @@ test('api: bootstrap carries the pods, connect sim, set, looks, label, rave, err
   r = await call('PUT', '/api/pods/pods/mini_a/label', { label: 'Left mini' });
   assert.deepEqual(r.body, { label: 'Left mini' });
   assert.equal((await call('GET', '/api/pods')).body.pods[0].label, 'Left mini');
+  r = await call('PUT', '/api/pods/pods/mini_a/boost', { on: true });
+  assert.equal(r.status, 200);
+  assert.equal(r.body.boost, true);
+  assert.equal((await call('GET', '/api/pods')).body.pods[0].boost, true);
   r = await call('DELETE', '/api/pods/looks/Hero');
   assert.deepEqual(r.body, { deleted: 'Hero' });
   r = await call('DELETE', '/api/pods/looks/Hero');
